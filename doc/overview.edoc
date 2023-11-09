@@ -2,7 +2,7 @@
 
    @version 1.2.4
    @author Maxim Fedorov, <maximfca@gmail.com>
-   @title argparse: A simple framework to create complex CLI.
+   @title arg_parse: A simple framework to create complex CLI.
 
    @doc
    Inspired by Python argparse.
@@ -142,7 +142,7 @@
 
        main(Args) ->
            #{force := Force, recursive := Recursive, dir := Dir} =
-               argparse:parse(Args, cli()),
+               arg_parse:parse(Args, cli()),
            io:format("Removing ~s (force: ~s, recursive: ~s)~n",
                [Dir, Force, Recursive]).
 
