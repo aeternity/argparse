@@ -35,6 +35,8 @@
 %%% '''
 %%% @end
 
+%%% Note: module was originally `argparse` - with OTP26 that name is in use by the
+%%% stdlib application... Hence the rename.
 -module(arg_parse).
 -author("maximfca@gmail.com").
 

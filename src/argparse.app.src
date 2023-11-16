@@ -1,10 +1,10 @@
 {application, argparse,
- [{description, "arg_parse: arguments parser, and cli framework"},
+ [{description, "argparse: arguments parser, and cli framework"},
   {vsn, "1.2.4"},
   {applications,
    [kernel,
     stdlib
    ]},
   {licenses, ["BSD 3-clause clear"]},
-  {links, [{"GitHub", "https://github.com/aeternity/argparse"}]}
+  {links, [{"GitHub", "https://github.com/max-au/argparse"}]}
  ]}.
