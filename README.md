@@ -1,4 +1,4 @@
-# argparse: command line parser for Erlang
+# arg_parse: command line parser for Erlang
 
 [![Build Status](https://github.com/max-au/argparse/actions/workflows/erlang.yml/badge.svg?branch=master)](https://github.com/max-au/argparse/actions) [![Hex.pm](https://img.shields.io/hexpm/v/argparse.svg)](https://hex.pm/packages/argparse) [![Hex Docs](https://img.shields.io/badge/hex-docs-blue.svg)](https://hexdocs.pm/argparse)
 
@@ -121,7 +121,7 @@ format usage output and error messages.
 
 See example: [doc/examples/multi](https://github.com/max-au/argparse/tree/master/doc/examples/multi)
 
-This example contains two modules, multi_math.erl and multi_string.erl.
+This example contains two modules, multi\_math.erl and multi\_string.erl.
 
 Use ```rebar3 escriptize``` to build the application. Try various commands,
 e.g. ```./multi math cos 1.0```, or ```./multi string lexemes 1+2+3+4 -s +```
@@ -136,7 +136,7 @@ It is possible to use argument parser alone, without the cli mini-framework:
 
     main(Args) ->
         #{force := Force, recursive := Recursive, dir := Dir} =
-            argparse:parse(Args, cli()),
+            arg_parse:parse(Args, cli()),
         io:format("Removing ~s (force: ~s, recursive: ~s)~n",
             [Dir, Force, Recursive]).
 

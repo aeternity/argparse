@@ -14,7 +14,7 @@
 %%% If root level command does not contain any sub-commands, parser returns plain map of
 %%% argument names to their values:
 %%% ```
-%%% 3> argparse:parse(["value"], #{arguments => [#{name => arg}]}).
+%%% 3> arg_parse:parse(["value"], #{arguments => [#{name => arg}]}).
 %%% #{arg => "value"}
 %%% '''
 %%% This map contains all arguments matching command line passed, initialised with
@@ -30,12 +30,14 @@
 %%% ```
 %%% 4> Cmd =  #{arguments => [#{name => arg}]}.
 %%% #{arguments => [#{name => arg}]}
-%%% 5> argparse:parse(["cmd", "value"], #{commands => #{"cmd" => Cmd}}).
+%%% 5> arg_parse:parse(["cmd", "value"], #{commands => #{"cmd" => Cmd}}).
 %%% {#{arg => "value"},{"cmd",#{arguments => [#{name => arg}]}}}
 %%% '''
 %%% @end
 
--module(argparse).
+%%% Note: module was originally `argparse` - with OTP26 that name is in use by the
+%%% stdlib application... Hence the rename.
+-module(arg_parse).
 -author("maximfca@gmail.com").
 
 -export([
@@ -288,9 +290,9 @@ help(Command, Options) ->
     unicode:characters_to_list(format_help(validate(Command, Options), Options)).
 
 %% @doc Format exception reasons produced by parse/2.
-%% Exception of class error with reason {argparse, Reason} is normally
+%% Exception of class error with reason {arg_parse, Reason} is normally
 %%  raised, and format_error accepts only the Reason part, leaving
-%%  other exceptions that do not belong to argparse out.
+%%  other exceptions that do not belong to arg_parse out.
 %% @returns string, ready to be printed via io:format().
 -spec format_error(Reason :: argparse_reason()) -> string().
 format_error({invalid_command, Path, Field, Text}) ->

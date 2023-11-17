@@ -53,7 +53,7 @@
 %% Callback returning CLI mappings.
 %% Must return a command, that may contain sub-commands.
 %% Also returns arguments, and handler.
--callback cli() -> argparse:command().
+-callback cli() -> arg_parse:command().
 
 %%--------------------------------------------------------------------
 %% API
@@ -127,7 +127,7 @@ discover_commands(Modules, Options) ->
     lists:foldl(
         fun (Mod, Cmds) ->
             ModCmd =
-                try {_, MCmd} = argparse:validate(Mod:cli(), Options), MCmd
+                try {_, MCmd} = arg_parse:validate(Mod:cli(), Options), MCmd
                 catch
                     Class:Reason:Stack when Warn =:= warn ->
                         ?LOG_WARNING("Error calling ~s:cli(): ~s:~p~n~p",
@@ -166,25 +166,25 @@ discover_commands(Modules, Options) ->
 dispatch(Args, CmdMap, Modules, Options) ->
     HelpEnabled = maps:get(help, Options, true),
     %% attempt to dispatch the command
-    try argparse:parse(Args, CmdMap, Options) of
+    try arg_parse:parse(Args, CmdMap, Options) of
         {ArgMap, PathTo} ->
             run_handler(CmdMap, ArgMap, PathTo, undefined);
         ArgMap ->
             %{ maps:find(default, Options), Modules, Options}
             run_handler(CmdMap, ArgMap, {[], CmdMap}, {Modules, Options})
     catch
-        error:{argparse, Reason} when HelpEnabled =:= false ->
-            io:format("error: ~s", [argparse:format_error(Reason)]),
+        error:{arg_parse, Reason} when HelpEnabled =:= false ->
+            io:format("error: ~s", [arg_parse:format_error(Reason)]),
             dispatch_error(Options, Reason);
-        error:{argparse, Reason} ->
+        error:{arg_parse, Reason} ->
             %% see if it was cry for help that triggered error message
             Prefixes = maps:get(prefixes, Options, "-"),
             case help_requested(Reason, Prefixes) of
                 false ->
-                    Fmt = argparse:format_error(Reason, CmdMap, Options),
+                    Fmt = arg_parse:format_error(Reason, CmdMap, Options),
                     io:format("error: ~s", [Fmt]);
                 CmdPath ->
-                    Fmt = argparse:help(CmdMap, Options#{command => tl(CmdPath)}),
+                    Fmt = arg_parse:help(CmdMap, Options#{command => tl(CmdPath)}),
                     io:format("~s", [Fmt])
             end,
             dispatch_error(Options, Reason)
@@ -222,7 +222,7 @@ run_handler(CmdMap, ArgMap, {[], _}, {Modules, Options}) ->
 %% finds first module that exports ctl/1 and execute it
 exec_cli([], CmdMap, _ArgMap, ArgOpts) ->
     %% command not found, let's print usage
-    io:format(argparse:help(CmdMap, ArgOpts));
+    io:format(arg_parse:help(CmdMap, ArgOpts));
 exec_cli([Mod|Tail], CmdMap, Args, ArgOpts) ->
     case erlang:function_exported(Mod, cli, length(Args)) of
         true ->
